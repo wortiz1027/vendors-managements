@@ -11,5 +11,6 @@ public interface VendorsQueryServices {
     CompletableFuture<Response> getAllVendor();
     CompletableFuture<ResponseVendor> getVendorById(String id);
     CompletableFuture<ResponseVendorTypes> getAllVendorTypes();
+    CompletableFuture<Response> getVendorByIds(String ids);
 
 }

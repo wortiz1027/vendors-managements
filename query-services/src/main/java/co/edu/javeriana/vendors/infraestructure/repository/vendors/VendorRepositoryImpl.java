@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -47,7 +49,7 @@ public class VendorRepositoryImpl implements Repository<Vendor> {
                                                 rs.getString("ID_PROVIDER"),
                                                 rs.getString("NAME_PROVIDER"),
                                                 rs.getString("NIT"),
-                                                new VendorTypes(rs.getString("ID_TYPE"), ""),
+                                                new VendorTypes(rs.getString("ID_TYPE"), rs.getString("DESCRIPTION")),
                                                 rs.getString("ADDRESS"),
                                                 rs.getString("TELEPHONE"),
                                                 rs.getString("EMAIL"),
@@ -95,6 +97,29 @@ public class VendorRepositoryImpl implements Repository<Vendor> {
         } catch(Exception e) {
             e.printStackTrace();
             return CompletableFuture.completedFuture(StatusCodes.ERROR.name());
+        }
+    }
+
+    @Override
+    public Optional<List<Vendor>> findVendorsByIds(String ids) {
+        try{
+
+            List<String> idents = Arrays.asList(ids.split(","));
+            List<Vendor> vendors = new ArrayList<>();
+
+            for (String id : idents) {
+
+                Vendor vendor = findById(id).get();
+
+                vendors.add(vendor);
+            }
+
+            LOG.info("[Vendor]: [{}]", vendors);
+
+            return Optional.of(vendors);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
         }
     }
 

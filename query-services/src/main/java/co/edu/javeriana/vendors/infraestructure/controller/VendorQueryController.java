@@ -92,4 +92,26 @@ public class VendorQueryController {
         return new ResponseEntity<>(rs, HttpStatus.ACCEPTED);
     }
 
+    @ApiOperation(value = "Consulta de vendors en el sistema", response = Response.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Consulta exitos de vendors"),
+            @ApiResponse(code = 400, message = "Error en los datos de entrada no se envio informacion del vendors"),
+            @ApiResponse(code = 500, message = "Error interno en el servidor, contacte y reporte con el administrador")
+    })
+    @PostMapping("/vendors/informations")
+    public ResponseEntity<CompletableFuture<Response>> informations(@RequestParam(name = "ids") String ids) throws ExecutionException, InterruptedException, UnknownHostException {
+        CompletableFuture<Response> rs = services.getVendorByIds(ids);
+
+        if (rs.get().getStatus().getCode().equalsIgnoreCase(StatusCodes.SUCCESS.name()))
+            return new ResponseEntity<>(rs, HttpStatus.OK);
+
+        if (rs.get().getStatus().getCode().equalsIgnoreCase(StatusCodes.EMPTY.name()))
+            return new ResponseEntity<>(rs, HttpStatus.NOT_FOUND);
+
+        if (rs.get().getStatus().getCode().equalsIgnoreCase(StatusCodes.ERROR.name()))
+            return new ResponseEntity<>(rs, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<>(rs, HttpStatus.ACCEPTED);
+    }
+
 }

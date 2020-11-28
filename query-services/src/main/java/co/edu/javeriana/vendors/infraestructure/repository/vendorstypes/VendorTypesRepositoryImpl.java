@@ -42,4 +42,9 @@ public class VendorTypesRepositoryImpl implements Repository<VendorTypes> {
     public CompletableFuture<String> create(VendorTypes data) {
         return null;
     }
+
+    @Override
+    public Optional<List<VendorTypes>> findVendorsByIds(String ids) {
+        return Optional.empty();
+    }
 }

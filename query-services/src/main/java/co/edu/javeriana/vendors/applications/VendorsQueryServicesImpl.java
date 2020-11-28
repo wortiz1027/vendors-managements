@@ -100,4 +100,31 @@ public class VendorsQueryServicesImpl implements VendorsQueryServices {
             return CompletableFuture.completedFuture(response);
         }
     }
+
+    @Override
+    public CompletableFuture<Response> getVendorByIds(String ids) {
+        Response response = new Response();
+        Status status = new Status();
+        try {
+            Optional<List<Vendor>> vendors = this.repository1.findVendorsByIds(ids);
+
+            if (!vendors.isPresent()) {
+                status.setCode(StatusCodes.EMPTY.name());
+                status.setDescription("There are not rows availables");
+                response.setStatus(status);
+                return CompletableFuture.completedFuture(response);
+            }
+
+            status.setCode(StatusCodes.SUCCESS.name());
+            status.setDescription("There are rows availables");
+            response.setStatus(status);
+            response.setVendors(vendors.get());
+            return CompletableFuture.completedFuture(response);
+        } catch (Exception e) {
+            status.setCode(StatusCodes.ERROR.name());
+            status.setDescription(String.format("There is an error getting vendors type: %s", e.getMessage()));
+            response.setStatus(status);
+            return CompletableFuture.completedFuture(response);
+        }
+    }
 }

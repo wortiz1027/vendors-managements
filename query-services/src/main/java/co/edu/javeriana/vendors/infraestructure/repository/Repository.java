@@ -9,5 +9,6 @@ public interface Repository<T> {
     Optional<T> findById(String id);
     Optional<List<T>> findByAll();
     CompletableFuture<String> create(T data);
+    Optional<List<T>> findVendorsByIds(String ids);
 
 }
