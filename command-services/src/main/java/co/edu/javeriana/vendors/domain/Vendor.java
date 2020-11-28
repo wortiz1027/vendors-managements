@@ -24,7 +24,7 @@ public class Vendor implements java.io.Serializable {
     private String nit;
 
     @ApiModelProperty(notes = "Campo con el id del tipo de vendor")
-    private VendorTypes idType;
+    private VendorTypes types;
 
     @ApiModelProperty(notes = "Campo con la direccion del vendor")
     private String address;
@@ -43,5 +43,8 @@ public class Vendor implements java.io.Serializable {
 
     @ApiModelProperty(notes = "Campo con el id de la ciudad")
     private String idCity;
+
+    @ApiModelProperty(notes = "Estado del vendor")
+    private String status;
 
 }

@@ -34,13 +34,13 @@ public class EventsConfiguration {
     String deadRoutingKey;
 
     @Value("${events.amqp.exchange}")
-    String productExchange;
+    String vendorExchange;
 
     @Value("${events.amqp.queue}")
-    String productQueue;
+    String vendorQueue;
 
     @Value("${events.amqp.routing-key}")
-    String productRoutingKey;
+    String vendorRoutingKey;
 
     @Bean
     DirectExchange deadLetterExchange() {
@@ -54,7 +54,7 @@ public class EventsConfiguration {
 
     @Bean
     Queue queue() {
-        return QueueBuilder.durable(productQueue)
+        return QueueBuilder.durable(vendorQueue)
                 .withArgument("x-dead-letter-exchange", deadExchange)
                 .withArgument("x-dead-letter-routing-key", deadRoutingKey)
                 .build();
@@ -62,7 +62,7 @@ public class EventsConfiguration {
 
     @Bean
     DirectExchange exchange() {
-        return new DirectExchange(productExchange);
+        return new DirectExchange(vendorExchange);
     }
 
     @Bean
@@ -72,15 +72,15 @@ public class EventsConfiguration {
 
     @Bean
     Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(productRoutingKey);
+        return BindingBuilder.bind(queue).to(exchange).with(vendorRoutingKey);
     }
 
     @Bean
     MessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory ) {
         SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
         simpleMessageListenerContainer.setConnectionFactory(connectionFactory);
-        simpleMessageListenerContainer.setQueues(queue());
-
+        //simpleMessageListenerContainer.setQueues(queue());
+        //simpleMessageListenerContainer.setMessageListener(new RabbitMQListener());
         return simpleMessageListenerContainer;
     }
 
