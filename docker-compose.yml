@@ -8,22 +8,36 @@
 
 version: '3.7'
 services:
-  products-command-services:
-    image: wortiz1027/products-command-services:latest
-    container_name: products-command-services
-    hostname: products-command-services
+  vendors-command-services:
+    image: wortiz1027/vendors-command-services:latest
+    container_name: vendors-command-services
+    hostname: vendors-command-services
     restart: always
     ports:
-      - 8081:8081
+      - 8100:8100
+      - 6100:6100
+    environment:  
+      - CONFIG_SERVER=http://10.39.1.85:9090
+      - EUREKA_SERVER=http://10.39.1.85:9091/eureka
+      - EUREKA_HOST=10.39.1.85
+      - RABBITMQ_HOST=10.39.1.85
+      - DB_VENDORS_COMMAND_HOST=10.39.1.130      
     networks:
       - ntw_backend
-  products-query-services:
-    image: wortiz1027/products-query-services:latest
-    container_name: products-query-services
-    hostname: products-query-services
+  vendors-query-services:
+    image: wortiz1027/vendors-query-services:latest
+    container_name: vendors-query-services
+    hostname: vendors-query-services
     restart: always
     ports:
-      - 8082:8082
+      - 8101:8101
+      - 6101:6101
+    environment:  
+      - CONFIG_SERVER=http://10.39.1.85:9090
+      - EUREKA_SERVER=http://10.39.1.85:9091/eureka
+      - EUREKA_HOST=10.39.1.85
+      - RABBITMQ_HOST=10.39.1.85
+      - DB_VENDORS_QUERY_HOST=10.39.1.130       
     networks:
       - ntw_backend
 networks:
